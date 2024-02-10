@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# nodes from the same chasis are listed below:
+# note there are 8 nodes/chasis, each node having 16 cores(processes)
+# so there are 128 processes/chasis
+# nodelist=c[010-017]  #chasis 1
+# nodelist=c[018-025]  #chasis 2
+# nodelist=c[026-033]  #chasis 3
+# nodelist=c[034-041]  #chasis 4
+# nodelist=c[042-049]  #chasis 5
+# nodelist=c[050-057]  #chasis 6
+# nodelist=c[058-065]  #chasis 7
+# nodelist=c[066-073]  #chasis 8
+# nodelist=c[074-081]  #chasis 9
+# nodelist=c[082-089]  #chasis 10
+# nodelist=c[090-097]  #chasis 11
+
+# commands to compile MPI code:
+# mpicxx -O2 HelloWorld_MPI_simple_extrainfo.cpp -o HelloWorld_MPI_simple_extrainfoMPICXX
+# commands to compile serial code:
+# icpx -O2 sruntest.cpp -o sruntest2ICPX
+
+#SBATCH --job-name=testrun2
+#SBATCH -o testrun2.%j.out            # name of your output file
+#SBATCH -e testrun2.%j.err            # name of your error file
+# -N 2 means running on 2 real nodes; -n 2, means 2 total cores are requested, one per node.
+#SBATCH -N 1                       # Number of servers to be used 88
+#SBATCH -n 2                       # Total number of cores to be used, there are 16 cores per node.
+#SBATCH --time=100-00:30              # time (DD-HH:MM) after which job will be canceled
+#SBATCH --partition=normal
+# if you wish to specify a set of nodes, remove one comment symbol from the next line
+##SBATCH --nodelist=c[010-025]
+
+#SBATCH --mail-type=BEGIN,END       # when to email user about job status
+#SBATCH --mail-user=myemail # email to send to user about job status updates
+
+# time prun ./name.cpp
+# Launch MPI-based executable, command line arguments are added with $1, $2, etc...
+time prun ./testrun2 10 11 100
+
+# Launch serial executable
+# time srun ./name of executable here
